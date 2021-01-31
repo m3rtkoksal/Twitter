@@ -44,7 +44,8 @@ class MainTabController: UITabBarController {
     // Mark: - API
     
     func fetchUser() {
-        UserService.shared.fetchUser { (user) in
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        UserService.shared.fetchUser(uid: uid) { (user) in
             print("DEBUG: Main tab user is \(user.username)")
             self.user = user
         }
@@ -77,7 +78,10 @@ class MainTabController: UITabBarController {
     // Mark: - Selectors
     
     @objc func actionButtonTapped() {
-        print(123)
+        guard let user = user else {return}
+        let nav = UINavigationController(rootViewController: UploadTweetController(user: user))
+        nav.modalPresentationStyle = .overFullScreen
+        present(nav, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -101,7 +105,7 @@ class MainTabController: UITabBarController {
     }
     
     func configureViewControllers() {
-        let feed = FeedController()
+        let feed = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
         let nav1 = templateNavigationController(image: UIImage(named:"home_unselected"), rootViewController: feed)
         let explore = ExploreController()
         let nav2 = templateNavigationController(image: UIImage(named: "search_unselected"), rootViewController: explore)
