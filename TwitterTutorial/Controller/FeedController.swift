@@ -52,7 +52,6 @@ class FeedController: UICollectionViewController {
     
     func configureUI() {
         view.backgroundColor = .white
-        
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.backgroundColor = .white
         
@@ -112,9 +111,9 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
 }
 
 extension FeedController: TweetCellDelegate {
-    func handleProfileImageTapped() {
+    func handleProfileImageTapped(_ cell: TweetCell) {
         print("DEBUG: Handle profile image tapped in controller")
-        let controller = ProfileController(collectionViewLayout: UICollectionViewLayout())
+        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(controller, animated: true)
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol TweetCellDelegate: class {
-    func handleProfileImageTapped()
+    func handleProfileImageTapped(_ cell: TweetCell)
 }
 
 class TweetCell: UICollectionViewCell {
@@ -144,7 +144,7 @@ class TweetCell: UICollectionViewCell {
     
     @objc func handleProfileImageTapped() {
         print("DEBUG: Go to user profile")
-        delegate?.handleProfileImageTapped()
+        delegate?.handleProfileImageTapped(self)
     }
     
     @objc func handleCommentTapped() {
