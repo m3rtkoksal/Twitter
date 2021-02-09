@@ -45,7 +45,13 @@ class FeedController: UICollectionViewController {
         super.viewDidLoad()
         configureUI()
         fetchTweets()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // saat ve pil beyaz text
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Helpers
@@ -113,7 +119,14 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
 extension FeedController: TweetCellDelegate {
     func handleProfileImageTapped(_ cell: TweetCell) {
         print("DEBUG: Handle profile image tapped in controller")
-        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+//        let controller = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        // feedcontrollerdan profilecontrollera user data transferi burada
+        
+        guard let user = cell.tweet?.user else {return}
+        let controller = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
     }
 }
+
+
