@@ -21,7 +21,7 @@ struct TweetService {
             "caption": caption] as [String : Any]
         let ref = REF_TWEETS.childByAutoId()
         guard let tweetID = ref.key else {return}
-        //update user-tweet after tweet upload
+        //update user-tweet after tweet upload done
         ref.updateChildValues(values) { (err, ref) in
             REF_USER_TWEETS.child(uid).updateChildValues([tweetID: 1], withCompletionBlock: completion)
         }
