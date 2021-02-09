@@ -16,6 +16,13 @@ class ProfileController: UICollectionViewController {
     
     private let user: User
     
+    private var tweets = [Tweet]() {
+        didSet {
+            // first tweets is 0 element array. It takes time to fetch tweets. But at that time ui is already visible. So with reload didset we are showing it
+            collectionView.reloadData()
+        }
+    }
+    
     // MARK: - API
     
     
@@ -33,6 +40,7 @@ class ProfileController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        fetchTweets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,6 +48,13 @@ class ProfileController: UICollectionViewController {
         // saat ve pil beyaz text
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    // MARK: - API
+    func fetchTweets() {
+        TweetService.shared.fetchTweets(forUser: user) { (tweets) in
+            self.tweets = tweets
+        }
     }
     
     // MARK: - Helpers
@@ -57,11 +72,12 @@ class ProfileController: UICollectionViewController {
 
 extension ProfileController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return tweets.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        cell.tweet = tweets[indexPath.row]
         return cell
     }
 }
